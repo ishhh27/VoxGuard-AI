@@ -78,5 +78,6 @@ Prediction + Confidence Score
 ## 👩‍💻 Author
 
 Harshita Joshi
+Isha Joshi
 
 AI Security • Voice Intelligence • Deepfake Detection
