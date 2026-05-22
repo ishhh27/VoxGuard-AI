@@ -23,32 +23,58 @@ from core.audio_features import (
 X = []
 y = []
 
-REAL_DIR = "dataset/real"
-FAKE_DIR = "dataset/fake"
+REAL_DIRS = [
+    "dataset/real",
+    "deepfake_audio_dataset_jay15k/real"
+]
+
+FAKE_DIRS = [
+    "dataset/fake",
+    "deepfake_audio_dataset_jay15k/fake"
+]
 
 
 # REAL AUDIO
-for file in os.listdir(REAL_DIR):
+for real_dir in REAL_DIRS:
 
-    path = f"{REAL_DIR}/{file}"
+    for file in os.listdir(real_dir):
 
-    features = extract_mfcc_features(path)
+        path = f"{real_dir}/{file}"
 
-    X.append(features)
+        try:
 
-    y.append(0)
+            features = extract_mfcc_features(
+                path
+            )
 
+            X.append(features)
+
+            y.append(0)
+
+        except Exception:
+
+            print(f"Skipping: {file}")
 
 # FAKE AUDIO
-for file in os.listdir(FAKE_DIR):
+for fake_dir in FAKE_DIRS:
 
-    path = f"{FAKE_DIR}/{file}"
+    for file in os.listdir(fake_dir):
 
-    features = extract_mfcc_features(path)
+        path = f"{fake_dir}/{file}"
 
-    X.append(features)
+        try:
 
-    y.append(1)
+            features = extract_mfcc_features(
+                path
+            )
+
+            X.append(features)
+
+            y.append(1)
+
+        except Exception:
+
+            print(f"Skipping: {file}")
 
 
 X = np.array(X)
@@ -56,9 +82,11 @@ y = np.array(y)
 
 
 model = RandomForestClassifier(
-    n_estimators=100
+    n_estimators=300,
+    max_depth=10,
+    random_state=42
 )
-
+print("Total samples:", len(X))
 model.fit(X, y)
 
 joblib.dump(
