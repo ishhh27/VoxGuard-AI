@@ -11,23 +11,39 @@ def predict_voice(features):
 
     features = np.array(features).reshape(1, -1)
 
-    prediction = model.predict(features)[0]
-
     probabilities = model.predict_proba(
         features
     )[0]
 
+    real_confidence = (
+        probabilities[0] * 100
+    )
+
+    fake_confidence = (
+        probabilities[1] * 100
+    )
+
     confidence = round(
-        max(probabilities) * 100,
+        max(
+            real_confidence,
+            fake_confidence
+        ),
         2
     )
 
-    label = (
-        "AI-GENERATED"
-        if prediction == 1
-        else "REAL"
-    )
+    # Smart threshold logic
+    if confidence < 65:
 
+        label = "SUSPICIOUS"
+
+    elif fake_confidence > real_confidence:
+
+        label = "AI-GENERATED"
+
+    else:
+
+        label = "REAL"
+        
     return {
         "prediction": label,
         "confidence": confidence,

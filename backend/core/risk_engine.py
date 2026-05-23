@@ -12,6 +12,10 @@ def calculate_authenticity_risk(
 
         risk_score += 50
 
+    # Suspicious audio boost
+    elif prediction == "SUSPICIOUS":
+
+        risk_score += 35
     # Confidence boost
     if confidence > 85:
 

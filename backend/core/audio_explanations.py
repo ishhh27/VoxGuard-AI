@@ -24,6 +24,22 @@ def generate_audio_explanations(
                 "Model confidence is extremely high"
             )
 
+    elif prediction == "SUSPICIOUS":
+
+        explanations.append(
+            "Uncertain vocal authenticity detected"
+        )
+
+        explanations.append(
+            "Synthetic speech indicators partially observed"
+        )
+
+        if confidence < 70:
+
+            explanations.append(
+                "Confidence below trusted threshold"
+            )
+
     else:
 
         explanations.append(
